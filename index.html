@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="藏语拉萨话视觉语音识别系统：上传视频，查看唇部 ROI 动作视频，获取藏文识别结果。">
+  <meta name="theme-color" content="#f5f5f2">
+  <title>藏语拉萨话视觉语音识别系统</title>
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 17v4h16v-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="14" height="14" rx="3"/><path d="m17 10 4-3v10l-4-3"/></symbol>
+    <symbol id="i-lips" viewBox="0 0 80 56"><path d="M5 29C15 20 26 9 34 16c3 3 9 3 12 0 8-7 19 4 29 13-15 3-19 16-35 16S19 32 5 29Z"/><path d="M5 29c12 0 21-4 35-4s23 4 35 4M14 31c17 6 35 6 52 0"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="m10 13 4-4m-6 6-2 2a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m4 2 2-2a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0" transform="translate(1 0)"/></symbol>
+  </svg>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#" aria-label="返回首页">
+        <span class="brand-mark" aria-hidden="true"><svg class="lips-icon"><use href="#i-lips"/></svg></span>
+        <span class="brand-message">让技术连接语言<small>让表达被看见</small></span>
+      </a>
+      <nav aria-label="主导航"><a class="nav-active" href="#workspace">识别工作台</a><button id="helpButton" class="nav-help">使用说明 <svg class="icon"><use href="#i-info"/></svg></button></nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="pageTitle">
+      <div><p class="eyebrow"><span></span> TIBETAN VISUAL SPEECH RECOGNITION</p>
+        <h1 id="pageTitle">藏语拉萨话<span class="title-emphasis">视觉语音识别系统</span></h1>
+        <p class="intro-description">从唇部动作到藏文表达<span class="description-divider">/</span>探索语言的另一种表达方式</p>
+      </div>
+      <div class="signal-illustration" aria-hidden="true">
+        <svg viewBox="0 0 248 112" fill="none">
+          <path d="M14 29v-8h8m39 0h8v8M14 65v8h8m39 0h8v-8" stroke="#a77c61" stroke-width="1.3"/>
+          <path d="M24 47c7-6 12-12 18-6 6-6 11 0 18 6-8 2-11 10-18 10s-10-8-18-10Zm0 0c13-3 23-3 36 0" stroke="#334f52" stroke-width="1.2" stroke-linejoin="round"/>
+          <path d="M82 47h18m-4-4 4 4-4 4m57-4h18m-4-4 4 4-4 4" stroke="#b4b6ad"/>
+          <path d="M111 44v6m6-13v20m6-28v36m6-45v54m6-41v28m6-18v8" stroke="#6d8d80" stroke-width="2" stroke-linecap="round"/>
+          <rect x="183" y="23" width="48" height="49" rx="5" stroke="#c9c8bc"/>
+          <path d="M193 36h28m-28 10h21m-21 10h25" stroke="#a77c61" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M14 90h217" stroke="#ddded5"/>
+          <circle cx="14" cy="90" r="2" fill="#a77c61"/><circle cx="231" cy="90" r="2" fill="#6d8d80"/>
+        </svg>
+        <span>VISUAL MOTION <b>→</b> WRITTEN LANGUAGE</span>
+      </div>
+    </section>
+
+    <section id="workspace" class="workspace" aria-label="识别工作台">
+      <ol class="steps" aria-label="识别流程">
+        <li id="step1" class="step active" aria-current="step"><span class="step-number">01</span><div><strong>输入视频</strong><small>选择或拖拽本地视频</small></div></li>
+        <li class="step-connector" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></li>
+        <li id="step2" class="step"><span class="step-number">02</span><div><strong>唇部 ROI</strong><small>查看唇部区域动作视频</small></div></li>
+        <li class="step-connector" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></li>
+        <li id="step3" class="step"><span class="step-number">03</span><div><strong>藏文结果</strong><small>获取、复制与导出文本</small></div></li>
+      </ol>
+
+      <div class="video-grid">
+        <section class="panel source-panel" aria-labelledby="sourceTitle">
+          <div class="panel-heading"><h2 id="sourceTitle"><span class="section-index">01</span>原始视频</h2><button id="replaceButton" class="text-button" hidden><svg class="icon"><use href="#i-upload"/></svg>更换视频</button><span id="sourceHint" class="muted">VIDEO INPUT</span></div>
+          <div class="source-stage" id="dropArea">
+            <button class="drop-zone" id="uploadButton" aria-label="上传输入视频，或将视频拖拽到此处">
+              <span class="upload-symbol"><svg class="icon"><use href="#i-upload"/></svg></span>
+              <strong>将视频拖拽到这里</strong><span>或点击选择本地视频</span><small>支持 MP4 / MOV / WEBM · 最大 500 MB</small>
+            </button>
+            <video id="sourceVideo" controls autoplay playsinline preload="auto" hidden aria-label="原始视频预览"></video>
+            <div class="drop-overlay" aria-hidden="true">松开以载入视频</div>
+          </div>
+          <div class="panel-foot"><span id="sourceStatus"><span class="status-dot neutral"></span>等待输入视频</span><span id="sourceMeta" class="mono">LOCAL VIDEO</span></div>
+        </section>
+
+        <section class="panel roi-panel" aria-labelledby="roiTitle">
+          <div class="panel-heading"><h2 id="roiTitle"><span class="section-index">02</span>唇部 ROI</h2><button class="text-button sync-button" id="syncButton" disabled aria-pressed="true"><svg class="icon"><use href="#i-link"/></svg>同步播放</button></div>
+          <div class="roi-stage">
+            <span class="roi-stage-label">REGION OF INTEREST</span>
+            <div id="roiPlaceholder" class="roi-placeholder"><div class="lip-frame"><i></i><i></i><i></i><i></i><svg class="lips-icon"><use href="#i-lips"/></svg></div><strong id="roiHint">等待唇部区域视频</strong><span id="roiSubhint">载入视频，开始识别后在此预览</span></div>
+            <video id="roiVideo" controls playsinline muted preload="auto" hidden aria-label="唇部 ROI 动作视频"></video>
+            <div class="scan-line" id="scanLine" hidden></div>
+            <span class="roi-coordinate">LIP MOTION / ROI</span>
+          </div>
+          <div class="panel-foot"><span id="roiStatus"><span class="status-dot neutral"></span>等待处理</span><span class="roi-size" id="roiMeta">— × —</span></div>
+        </section>
+      </div>
+
+      <div class="action-bar">
+        <div class="action-description" id="actionDescription"><svg class="icon"><use href="#i-info"/></svg><span>选择本地视频，开始视觉语音识别</span></div>
+        <div class="action-buttons"><button id="resetButton" class="button button-secondary" disabled><svg class="icon"><use href="#i-reset"/></svg>重置</button><button id="recognizeButton" class="button button-primary" disabled><svg class="icon"><use href="#i-play"/></svg><span>开始识别</span><svg class="icon arrow"><use href="#i-arrow"/></svg></button></div>
+      </div>
+      <div class="progress-track" id="progressTrack" hidden><div id="progressFill"></div></div>
+      <p id="errorMessage" class="error-message" role="alert" hidden></p>
+
+      <section class="result-panel" aria-labelledby="resultTitle">
+        <div class="result-heading"><div><h2 id="resultTitle"><span class="section-index">03</span>藏文识别结果</h2><span id="resultBadge" class="result-badge">等待识别</span></div><div class="result-actions"><button id="copyButton" class="text-button" disabled><svg class="icon"><use href="#i-copy"/></svg>复制文本</button><span></span><button id="downloadButton" class="text-button" disabled><svg class="icon"><use href="#i-download"/></svg>导出 TXT</button></div></div>
+        <div class="result-body" aria-live="polite" aria-atomic="true"><div id="resultPlaceholder" class="result-placeholder"><span class="tibetan-placeholder" lang="bo">བོད་ཡིག</span><span>识别完成后，藏文文本将在这里呈现</span></div><p id="resultText" class="tibetan-text" lang="bo" dir="ltr" hidden></p></div>
+        <div class="result-footer"><span><span class="status-dot" id="resultDot"></span><span id="resultStatus">准备就绪</span></span><span id="resultCount">藏语 · 拉萨话</span></div>
+      </section>
+    </section>
+
+  </main>
+
+  <input id="fileInput" type="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" hidden>
+  <div id="toast" class="toast" role="status" hidden><svg class="icon"><use href="#i-check"/></svg><span></span></div>
+  <dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-top"><span class="eyebrow">QUICK GUIDE</span><button id="closeHelpButton" class="icon-button" aria-label="关闭使用说明"><svg class="icon"><use href="#i-close"/></svg></button></div><h2 id="helpTitle">三步，读懂唇部表达</h2><ol class="help-steps"><li><b>上传视频</b><p>从本地选择或拖拽视频，载入后会自动播放。页面不展示文件名。</p></li><li><b>开始识别</b><p>点击“开始识别”，唇部 ROI 视频会自动播放。完整播放一遍后，系统输出藏文结果。</p></li><li><b>查看与导出</b><p>可以暂停或继续播放，也可以关闭同步分别查看两个视频。结果支持复制和导出 UTF-8 文本。</p></li></ol><p class="help-note">更换视频或点击重置会结束当前处理，并清除之前的识别结果。</p><button id="understoodButton" class="button button-primary">开始使用 <svg class="icon"><use href="#i-arrow"/></svg></button></dialog>
+  <noscript><p class="noscript">请启用 JavaScript 以使用视频识别系统。</p></noscript>
+  <template id="inputDownloads">
+    <section class="input-downloads" aria-labelledby="inputDownloadsTitle">
+      <h3 id="inputDownloadsTitle">获取输入视频</h3>
+      <p>当前设备尚无视频时，可先下载以下任意文件，再返回工作台从本地上传。</p>
+      <div class="input-download-links">
+        <a href="videos/clip0055_0023.mp4" download="clip0055_0023.mp4">视频 01 <svg class="icon"><use href="#i-download"/></svg></a>
+        <a href="videos/clip0170_0008.mp4" download="clip0170_0008.mp4">视频 02 <svg class="icon"><use href="#i-download"/></svg></a>
+        <a href="videos/clip0168_0003.mp4" download="clip0168_0003.mp4">视频 03 <svg class="icon"><use href="#i-download"/></svg></a>
+        <a href="videos/clip0111_0004.mp4" download="clip0111_0004.mp4">视频 04 <svg class="icon"><use href="#i-download"/></svg></a>
+      </div>
+    </section>
+  </template>
+  <script src="hosting.js" defer></script>
+</body>
+</html>
